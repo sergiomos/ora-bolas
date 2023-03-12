@@ -1,4 +1,3 @@
-
 const distancia = (x1, x2, y1, y2) => {
   const x = Math.pow((x2 - x1), 2);
   const y = Math.pow((y2 - y1), 2);
@@ -21,3 +20,7 @@ const consegueInterceptar = (tempoRobo, tempoBola) => {
 const interceptou = (distancia, raioDeInterceptacao) => {
   return distancia < raioDeInterceptacao;
 }
+
+const milimetroParaMetro = (milimetro) => milimetro / 1000;
+
+const metroParaMilimetro = (metro) => metro * 1000;
