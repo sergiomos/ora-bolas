@@ -2,8 +2,8 @@ const {pegarCoordenadas} = require('./coordenadas.js');
 const { distancia, tempoInterceptar, consegueInterceptar } = require('./uteis.js');
 
 const robo = {
-    x: 2,
-    y: 3,
+    x: 8,
+    y: 4,
     vX: 2.8,
     vY: 2.8,
 }
@@ -11,10 +11,11 @@ const robo = {
 const cordenadasBola = pegarCoordenadas();
 
 const inteceptar = cordenadasBola.find(({tempo, xBola, yBola}) => {
-    const distanciaRobo = distancia(robo.x, xBola, robo.y, yBola);
-    const tempoRobo = tempoInterceptar(robo.velocidade, distanciaRobo);
+    const {dX, dY} = distancia(robo.x, xBola, robo.y, yBola);
+    const tempoRoboX = tempoInterceptar(robo.vX, dX);
+    const tempoRoboY = tempoInterceptar(robo.vY, dY);
     
-    return consegueInterceptar(tempoRobo, tempo);
+    return consegueInterceptar(tempoRoboX, tempo) && consegueInterceptar(tempoRoboY, tempo);
 });
 
 
