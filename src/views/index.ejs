@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./css/global.css">
+  <link rel="stylesheet" href="./css/campo.css">
+  <script src="./js/home.js"></script>
+  <title>Document</title>
+</head>
+<body>
+  <aside class="aside">
+    <div>
+      <menu>
+        <li class="active">Campo</li>
+        <li>Gráficos</li>
+      </menu>
+    </div>
+  </aside>
+  <header class="header">
+    <h1>Ora Bolas</h1>
+    <div class="inputs">
+      <input 
+        type="number" 
+        name="x_robo" 
+        id="x_robo" 
+        placeholder="Posição X do robô">
+      <input 
+      type="number" 
+      name="y_robo" 
+      id="y_robo" 
+      placeholder="Posição Y do robô" >
+      <button id="start">Começar</button>
+    </div>
+  </header>
+  <main class="main">
+    <canvas id="campo" width="900" height="530"></canvas>
+  </main>
+</body>
+</html>

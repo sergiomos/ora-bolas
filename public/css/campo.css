@@ -1,0 +1,9 @@
+main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#campo {
+  background-color: rgb(201, 244, 201);
+}
