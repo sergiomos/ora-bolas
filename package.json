@@ -3,9 +3,16 @@
   "version": "1.0.0",
   "description": "",
   "main": "./src/server.js",
+  "engines": {
+    "node": "19.x"
+  },
   "scripts": {
-    "dev": "nodemon ./src/server.js",
-    "start": "node ./src/server.js"
+    "start": "node ./src/server.js",
+    "dev": "nodemon ./src/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sergiomos/ora-bolas.git"
   },
   "keywords": [],
   "author": "",
