@@ -2,7 +2,7 @@ exports.distancia = (xRobo, xBola, yRobo, yBola) => {
   const dX = Math.pow((xBola - xRobo), 2);
   const dY = Math.pow((yBola - yRobo), 2);
 
-  return {dX , dY};
+  return Math.sqrt(dy + dx);
 }
 
 exports.tempoInterceptar = (velocidade, distancia) => {
@@ -13,13 +13,12 @@ const posicaoFutura = (posicaoAtual, velocidade, tempo) => {
   return posicaoAtual + (velocidade * tempo);
 }
 
-exports.consegueInterceptar = (tempoRobo, tempoBola) => {
+exports.consegueInterceptar = (tempoRobo, tempoBola, distancia, raio) => {
   return tempoRobo < tempoBola;
 }
 
-const interceptou = (distancia, raioDeInterceptacao) => {
-  return distancia < raioDeInterceptacao;
-}
+exports.interceptou = (distancia, raioDeInterceptacao) =>  distancia <= raioDeInterceptacao;
+
 
 const milimetroParaMetro = (milimetro) => milimetro / 1000;
 
