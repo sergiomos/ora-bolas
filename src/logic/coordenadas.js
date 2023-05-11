@@ -5,7 +5,7 @@ const filePath = path.join(__dirname, '../trajetoria_bola.txt');
 
 const serialize = ([tempo, xBola, yBola]) => ({tempo, xBola, yBola})
 
-exports.pegarCoordenadas = () => {
+exports.pegarCoordenadasBola = () => {
   const arquivo = readFileSync(filePath, {encoding: 'utf16le'});
 
   const coordenadas = arquivo.split('\n')

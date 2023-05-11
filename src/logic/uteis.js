@@ -1,8 +1,8 @@
-exports.distancia = (xRobo, xBola, yRobo, yBola) => {
+exports.distancia = (xRobo, xBola, yRobo, yBola, raioDeInterceptacao) => {
   const dX = Math.pow((xBola - xRobo), 2);
   const dY = Math.pow((yBola - yRobo), 2);
 
-  return Math.sqrt(dy + dx);
+  return Math.sqrt(dY + dX) - raioDeInterceptacao
 }
 
 exports.tempoInterceptar = (velocidade, distancia) => {

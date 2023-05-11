@@ -23,6 +23,13 @@ const getCoordenadasBola = async () => {
   return body.data;
 }
 
+const getCoordenadasRobo = async () => {
+  const res = await fetch('/coordenadas/robo')
+  const body = await res.json();
+  
+  return body.data;
+}
+
 const desenhaBola = () => {
   const bolaX = bolaCoordenadas[px].xBola*100 + 20;
   const bolaY = bolaCoordenadas[px].yBola*100 + 20;
