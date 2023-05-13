@@ -21,10 +21,9 @@ const pegarCoordenadasRobo = (x, y) => {
     const pontoFinal = pontoDeInterceptacao(x, y, velocidadeMaxima);
     console.log(pontoFinal);
     const pos = [];
-    
+
     for(tempo = 0; tempo != pontoFinal.tempo; tempo += 0.01){
-        const x2 = velocidadeMaxima/pontoFinal.tempo - y
-        const y2 = velocidadeMaxima/pontoFinal.tempo - x
+        const x2 = x 
 
         pos.push({x: x2, y: y2, tempo})
     }
