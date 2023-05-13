@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const ejs = require('ejs');
-const { pegarCoordenadasBola: pegarCoordenadas } = require('./logic/coordenadas');
+const { pegarCoordenadasBola, pegarCoordenadasRobo } = require('./logic/coordenadas');
 
 const PORT = process.env.PORT || 3000;
 
@@ -20,13 +20,17 @@ app.get('/', (req, res) => {
   res.render('index', {});
 });
 
+app.get('/grafico', (req, res) => {
+  res.redirect('grafico.html');
+});
+
 app.get('/coordenadas/bola', (req, res) => {
-  res.status(200).json({data: pegarCoordenadas()});
+  res.status(200).json({data: pegarCoordenadasBola()});
 });
 
 app.get('/coordenadas/robo', (req, res) => {
   const { x, y } = req.query;
-  res.status(200).json({data: pegarCoordenadasRobo(x, y)});
+  res.status(200).json({data: pegarCoordenadasRobo(parseInt(x), parseInt(y))});
 });
 
 app.listen(PORT, () => {

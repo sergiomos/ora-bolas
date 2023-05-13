@@ -10,6 +10,11 @@
   font-family: 'Roboto', sans-serif;
 }
 
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
 body {
   display: grid;
 
@@ -44,6 +49,13 @@ body {
   margin-bottom: 1.6rem;
   color: #929292;
   cursor: pointer;
+  transition: .2s;
+}
+
+.aside li:hover {
+  -webkit-box-shadow: -8px 17px 70px -21px rgba(37,37,37,0.46);
+  -moz-box-shadow: -8px 17px 70px -21px rgba(37,37,37,0.46);
+  box-shadow: -8px 17px 70px -21px rgba(37,37,37,0.46);
 }
 
 .aside .active {

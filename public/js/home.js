@@ -1,8 +1,4 @@
 let canvas, ctx;
-const robo = {
-  x: 0,
-  y: 0,
-}
 
 let px = 0;
 let anima;

@@ -1,21 +1,82 @@
-const { readFileSync } = require('fs');
 const path = require('path');
+const { readFileSync } = require('fs');
+const { distancia, tempoInterceptar, consegueInterceptar } = require('./uteis.js');
 
 const filePath = path.join(__dirname, '../trajetoria_bola.txt');
 
-const serialize = ([tempo, xBola, yBola]) => ({tempo, xBola, yBola})
+const serialize = ([tempo, x, y]) => ({ tempo, x, y });
 
-exports.pegarCoordenadasBola = () => {
-  const arquivo = readFileSync(filePath, {encoding: 'utf16le'});
+const pegarCoordenadasBola = () => {
+  const arquivo = readFileSync(filePath, { encoding: 'utf16le' });
 
   const coordenadas = arquivo.split('\n')
-  .slice(1) // retirando a primeira linha (t/s, x/m,  y/m)
-  .map((e) => e.replace('\r', '') //remove os returns
-              .replace(/\,/g, '.') // substitui as virgulas pelo ponto
-              .split('\t') // remove os tabs
-              .map(n => parseFloat(n))) // passa os numeros de string pra float
-  .map(serialize); // transforma um array em objeto
+    .slice(1)
+    .map((e) => e.replace('\r', '')
+      .replace(/\,/g, '.')
+      .split('\t')
+      .map(n => parseFloat(n)))
+    .map(serialize);
 
   return coordenadas
 }
+
+
+const pontoDeInterceptacao = (roboX, roboY) => {
+  const cordenadasBola = pegarCoordenadasBola();
+
+  const inteceptar = cordenadasBola.find(({ tempo, x: xBola, y: yBola }) => {
+    const dist = distancia(roboX, xBola, roboY, yBola);
+    const tempoRobo = tempoInterceptar(dist);
+    return consegueInterceptar(tempoRobo, tempo, dist);
+  });
+
+  return { x: inteceptar.x, y: inteceptar.y, tempo: inteceptar.tempo };
+}
+
+
+const pegarCoordenadasRobo = (x, y) => {
+  const pontoFinal = pontoDeInterceptacao(x, y);
+  const pos = [{ tempo: 0, x, y }];
+  const v = 0.28 * 2
+  let x2 = x, y2 = y, tempo;
+  let i = 0;
+  while (x2 != pontoFinal.x || y2 != pontoFinal.y) {
+    let vX, vY;
+    const xAnterior = pos[i].x
+    const yAnterior = pos[i].y
+
+
+    if (pontoFinal.x > x && x2 != pontoFinal.x) {
+      vX = (pontoFinal.x - xAnterior) > v ? v : pontoFinal.x - xAnterior;
+
+    } else if (pontoFinal.x < x && x2 != pontoFinal.x) {
+      vX = (pontoFinal.x - xAnterior) < -v ? -v : pontoFinal.x - xAnterior
+
+    } else {
+      vX = 0;
+    }
+
+    if (pontoFinal.y > y && y2 != pontoFinal.y) {
+      vY = (pontoFinal.y - yAnterior) > v ? v : pontoFinal.y - yAnterior
+
+    } else if (pontoFinal.y < y && y2 != pontoFinal.y) {
+      vY = (pontoFinal.y - yAnterior) < -v ? -v : pontoFinal.y - yAnterior
+
+    } else {
+      vY = 0;
+    }
+
+    x2 += vX
+    y2 += vY
+
+    tempo = pos[i].tempo + 0.02
+    pos.push({ tempo, x: x2, y: y2 })
+    i++
+  }
+
+
+  return pos
+}
+
+module.exports = { pegarCoordenadasBola, pegarCoordenadasRobo }
 
