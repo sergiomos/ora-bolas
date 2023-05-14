@@ -1,6 +1,7 @@
 const path = require('path');
 const { readFileSync } = require('fs');
 const { distancia, tempoInterceptar, consegueInterceptar } = require('./uteis.js');
+const { VELOCIDADE_MAXIMA_M } = require('./constantes.js');
 
 const filePath = path.join(__dirname, '../trajetoria_bola.txt');
 
@@ -37,7 +38,6 @@ const pontoDeInterceptacao = (roboX, roboY) => {
 const pegarCoordenadasRobo = (x, y) => {
   const pontoFinal = pontoDeInterceptacao(x, y);
   const pos = [{ tempo: 0, x, y }];
-  const v = 0.28 * 2
   let x2 = x, y2 = y, tempo;
   let i = 0;
   while (x2 != pontoFinal.x || y2 != pontoFinal.y) {
@@ -47,20 +47,20 @@ const pegarCoordenadasRobo = (x, y) => {
 
 
     if (pontoFinal.x > x && x2 != pontoFinal.x) {
-      vX = (pontoFinal.x - xAnterior) > v ? v : pontoFinal.x - xAnterior;
+      vX = (pontoFinal.x - xAnterior) > VELOCIDADE_MAXIMA_M ? VELOCIDADE_MAXIMA_M : pontoFinal.x - xAnterior;
 
     } else if (pontoFinal.x < x && x2 != pontoFinal.x) {
-      vX = (pontoFinal.x - xAnterior) < -v ? -v : pontoFinal.x - xAnterior
+      vX = (pontoFinal.x - xAnterior) < -VELOCIDADE_MAXIMA_M ? -VELOCIDADE_MAXIMA_M : pontoFinal.x - xAnterior
 
     } else {
       vX = 0;
     }
 
     if (pontoFinal.y > y && y2 != pontoFinal.y) {
-      vY = (pontoFinal.y - yAnterior) > v ? v : pontoFinal.y - yAnterior
+      vY = (pontoFinal.y - yAnterior) > VELOCIDADE_MAXIMA_M ? VELOCIDADE_MAXIMA_M : pontoFinal.y - yAnterior
 
     } else if (pontoFinal.y < y && y2 != pontoFinal.y) {
-      vY = (pontoFinal.y - yAnterior) < -v ? -v : pontoFinal.y - yAnterior
+      vY = (pontoFinal.y - yAnterior) < -VELOCIDADE_MAXIMA_M ? -VELOCIDADE_MAXIMA_M : pontoFinal.y - yAnterior
 
     } else {
       vY = 0;
@@ -69,7 +69,7 @@ const pegarCoordenadasRobo = (x, y) => {
     x2 += vX
     y2 += vY
 
-    tempo = pos[i].tempo + 0.02
+    tempo = pos[i].tempo + 0.01
     pos.push({ tempo, x: x2, y: y2 })
     i++
   }
