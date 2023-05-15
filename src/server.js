@@ -29,7 +29,9 @@ app.get('/coordenadas/bola', (req, res) => {
 });
 
 app.get('/coordenadas/robo', (req, res) => {
-  const { x, y } = req.query;
+  const x = req.query.x || 0;
+  const y = req.query.y || 0;
+
   res.status(200).json({data: pegarCoordenadasRobo(parseInt(x), parseInt(y))});
 });
 

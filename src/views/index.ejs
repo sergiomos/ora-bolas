@@ -13,14 +13,6 @@
   <title>Document</title>
 </head>
 <body>
-  <aside class="aside">
-    <div>
-      <menu>
-        <a href="/"><li class="active">Campo</li></a>
-        <a href="/grafico"><li>Gráficos</li></a>
-      </menu>
-    </div>
-  </aside>
   <header class="header">
     <h1>Ora Bolas</h1>
     <div class="inputs">
@@ -37,8 +29,21 @@
       <button id="start">Começar</button>
     </div>
   </header>
-  <main class="main">
-    <canvas id="campo" width="900" height="530"></canvas>
-  </main>
+
+  <div id="container">
+    <aside class="aside">
+      <div>
+        <menu>
+          <a href="/"><li class="active">Campo</li></a>
+          <a href="/grafico"><li>Gráficos</li></a>
+        </menu>
+      </div>
+    </aside>
+  
+    <main class="main">
+      <canvas id="campo" width="900" height="530"></canvas>
+    </main>
+  </div>
+ 
 </body>
 </html>

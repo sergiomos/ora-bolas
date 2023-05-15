@@ -2,8 +2,13 @@ main {
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 1.6rem;
+  width: 100%;
 }
 
 #campo {
   background-color: rgb(201, 244, 201);
+  max-width: 100%;
+  height: auto;
+  margin: auto;
 }

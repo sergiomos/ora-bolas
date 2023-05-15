@@ -78,5 +78,10 @@ const pegarCoordenadasRobo = (x, y) => {
   return pos
 }
 
+const bola = pegarCoordenadasBola()
+const teste = bola.map((e) => e);
+
+console.log(teste);
+
 module.exports = { pegarCoordenadasBola, pegarCoordenadasRobo }
 
