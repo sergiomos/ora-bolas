@@ -16,7 +16,8 @@ const pegarCoordenadasBola = () => {
       .replace(/\,/g, '.')
       .split('\t')
       .map(n => parseFloat(n)))
-    .map(serialize);
+    .map(serialize)
+    .filter((e) => !Number.isNaN(e.x)  && !Number.isNaN(e.y) && !Number.isNaN(e.tempo));
 
   return coordenadas
 }
@@ -78,10 +79,37 @@ const pegarCoordenadasRobo = (x, y) => {
   return pos
 }
 
-const bola = pegarCoordenadasBola()
-const teste = bola.map((e) => e);
+const bola = pegarCoordenadasBola(9, 9)
+const velocidade = bola.map((pos, i, arr) => {
+  if(i == 0 || i == arr.length - 1)
+  return {tempo: pos.tempo, vx: 0, vy: 0};
 
-console.log(teste);
+  const nextPos = arr[i+1];
+  const vx = Math.abs(pos.x - nextPos.x).toFixed(2)
+  const vy =  Math.abs(pos.y - nextPos.y).toFixed(2);
+
+  return {tempo: pos.tempo, vx, vy}
+});
+
+const aceleracao = velocidade.map((pos, i, arr) => {
+  let ax, ay;
+
+  const firstOrLast = i == 0;
+
+  switch(true){
+    case firstOrLast:
+      ax = 0;
+      ay = 0
+      break;
+
+    default:
+      const previousPos = arr[i-1];
+      ax = (pos.vx - previousPos.vx).toFixed(2)
+      ay =  (pos.vy - previousPos.vy).toFixed(2);
+      break;
+  }
+
+  return {tempo: pos.tempo, ax, ay}
+});
 
 module.exports = { pegarCoordenadasBola, pegarCoordenadasRobo }
-
