@@ -3,16 +3,22 @@ const options = document.getElementsByClassName('graficoMenu');
 const getCanvasId = (option) => {
   switch (option) {
     case 'grafico1':
-      return 'xBolaRobo'
-
-    case 'grafico2':
-      return 'yBolaRobo'
-
-    case 'grafico3':
       return 'interceptacaoSpan'
 
+    case 'grafico2':
+      return 'xyBolaRobo'
+
+    case 'grafico3':
+      return 'vxVyRoboBola'
+
+    case 'grafico4':
+      return 'axAyRoboBola'
+    
+    case 'grafico5':
+      return 'aBolaRobo'
+
     default:
-      return 'xBolaRobo';
+      return 'interceptacaoSpan';
   }
 }
 

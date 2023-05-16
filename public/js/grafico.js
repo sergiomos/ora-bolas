@@ -14,17 +14,17 @@ const getCoordenadasRobo = async (roboX, roboY) => {
   return body.data;
 }
 
-let xBolaRoboPorTempoChart, yBolaRoboPorTempoChart, bolaRoboInterceptacaoChart;
+let xyBolaRoboPorTempoChart, bolaRoboInterceptacaoChart, velocidadesBolaRoboChart;
 
-const gerarGraficos = async (coordenadasBola, coordenadasRobo) => {
+const gerarGraficos = (coordenadasBola, coordenadasRobo) => {
   try {
-    xBolaRoboPorTempoChart.destroy();
-    yBolaRoboPorTempoChart.destroy();
+    xyBolaRoboPorTempoChart.destroy();
     bolaRoboInterceptacaoChart.destroy();
+    velocidadesBolaRoboChart.destroy();
   } finally {
-    xBolaRoboPorTempoChart = await xBolaRoboPorTempo(coordenadasBola, coordenadasRobo);
-    yBolaRoboPorTempoChart = await yBolaRoboPorTempo(coordenadasBola, coordenadasRobo);
-    bolaRoboInterceptacaoChart = await bolaRoboInterceptacao(coordenadasBola, coordenadasRobo);
+    xyBolaRoboPorTempoChart =  xyBolaRoboPorTempo(coordenadasBola, coordenadasRobo);
+    bolaRoboInterceptacaoChart =  bolaRoboInterceptacao(coordenadasBola, coordenadasRobo);
+    velocidadesBolaRoboChart =  velocidadesBolaRobo(coordenadasBola, coordenadasRobo);
   }
 }
 
@@ -65,65 +65,7 @@ const configs = ({ textX, textY, title, data }) => ({
   }
 })
 
-const xBolaRoboPorTempo = async (coordenadasBola, coordenadasRobo) => {
-  const canvas = document.getElementById('x-robo-bola');
-
-  const data = {
-    datasets: [
-      {
-        label: 'Robo',
-        data: coordenadasRobo.map(({ x, tempo }) => ({ x: tempo, y: x })),
-
-      },
-      {
-        label: 'Bola',
-        data: coordenadasBola.map(({ x, tempo }) => ({ x: tempo, y: x })),
-      }
-
-    ]
-  }
-
-  const chartConfig = configs({
-    textX: 'Tempo',
-    textY: 'X',
-    title: 'Pontos X bola e do robô em relação ao tempo',
-    data
-  })
-
-  const chart = new Chart(canvas, chartConfig);
-  return chart;
-}
-
-const yBolaRoboPorTempo = async (coordenadasBola, coordenadasRobo) => {
-  const canvas = document.getElementById('y-robo-bola');
-
-  const data = {
-    datasets: [
-      {
-        label: 'Robo',
-        data: coordenadasRobo.map(({ y, tempo }) => ({ x: tempo, y: y })),
-
-      },
-      {
-        label: 'Bola',
-        data: coordenadasBola.map(({ y, tempo }) => ({ x: tempo, y: y })),
-      }
-
-    ]
-  }
-  const chartConfig = configs({
-    textX: 'Tempo',
-    textY: 'Y',
-    title: 'Pontos Y bola e do robô em relação ao tempo',
-    data
-  })
-
-
-  const chart = new Chart(canvas, chartConfig);
-  return chart;
-}
-
-const bolaRoboInterceptacao = async (coordenadasBola, coordenadasRobo) => {
+const bolaRoboInterceptacao = (coordenadasBola, coordenadasRobo) => {
   const canvas = document.getElementById('interceptacao');
 
   const data = {
@@ -151,6 +93,88 @@ const bolaRoboInterceptacao = async (coordenadasBola, coordenadasRobo) => {
   return chart;
 }
 
+const xyBolaRoboPorTempo = (coordenadasBola, coordenadasRobo) => {
+  const canvas = document.getElementById('xy-robo-bola');
+
+  const data = {
+    datasets: [
+      {
+        label: 'Robo X',
+        data: coordenadasRobo.map(({ x, tempo }) => ({ x: tempo, y: x })),
+
+      },
+      {
+        label: 'Bola X',
+        data: coordenadasBola.map(({ x, tempo }) => ({ x: tempo, y: x })),
+      },
+      {
+        label: 'Robo Y',
+        data: coordenadasRobo.map(({ y, tempo }) => ({ x: tempo, y: y })),
+
+      },
+      {
+        label: 'Bola Y',
+        data: coordenadasBola.map(({ y, tempo }) => ({ x: tempo, y: y })),
+      }
+
+    ]
+  }
+
+  const chartConfig = configs({
+    textX: 'Tempo',
+    textY: 'X e Y',
+    title: 'Pontos X e Y da bola e do robô em relação ao tempo',
+    data
+  })
+
+  const chart = new Chart(canvas, chartConfig);
+  return chart;
+}
+
+const velocidadesBolaRobo = (coordenadasBola, coordenadasRobo) => {
+  const canvas = document.getElementById('vx-vy-robo-bola');
+
+  const velocidadeBola = velocidade(coordenadasBola);
+  const velocidadeRobo = velocidade(coordenadasRobo);
+
+  console.log(velocidadeBola, velocidadeRobo);
+
+  const data = {
+    datasets: [
+      {
+        label: 'Robo Vx',
+        data: velocidadeRobo.map(({ vx, tempo }) => ({ x: tempo, y: vx }))
+
+      },
+      {
+        label: 'Bola Vx',
+        data: velocidadeBola.map(({ vx, tempo }) => ({ x: tempo, y: vx }))
+      },
+      {
+        label: 'Robo Vx',
+        data: velocidadeRobo.map(({ vy, tempo }) => ({ x: tempo, y: vy }))
+
+      },
+      {
+        label: 'Bola Vy',
+        data: velocidadeBola.map(({ vy, tempo }) => ({ x: tempo, y: vy }))
+      }
+
+    ]
+  }
+
+  const chartConfig = configs({
+    textX: 'Tempo',
+    textY: 'vX e vY',
+    title: 'vX e vY da bola e do robô em relação ao tempo',
+    data
+  })
+
+  const chart = new Chart(canvas, chartConfig);
+  return chart;
+}
+
+
 const handleStart = async () => {
   const roboX = document.getElementById('x_robo').value;
   const RoboY = document.getElementById('y_robo').value;
@@ -160,7 +184,7 @@ const handleStart = async () => {
   const tete = await getCoordenadasBola();
   const coordenadasBola = await tete.filter((e) => e.x <= inter.x && e.y <= inter.y);
 
-  await gerarGraficos(coordenadasBola, coordenadasRobo);
+  gerarGraficos(coordenadasBola, coordenadasRobo);
 }
 
 window.onload = () => {
