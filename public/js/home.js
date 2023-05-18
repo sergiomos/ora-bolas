@@ -28,23 +28,13 @@ const getCoordenadasRobo = async (x, y) => {
   return body.data;
 }
 
-const desenhaBola = () => {
-  const bolaRaio = 20;
-  const bolaX = coordenadasBola[px].x * 100 + bolaRaio
-  const bolaY = coordenadasBola[px].y * 100 + bolaRaio
-
-    if(dentroDaTela(bolaX, bolaY, bolaRaio, bolaRaio)) {
+const desenha = (x, y, raio, color) => {
+    if(dentroDaTela(x, y, raio, raio)) {
       ctx.beginPath()
-      ctx.fillStyle = 'purple';
-      ctx.arc(bolaX, bolaY, bolaRaio, 0, 2 * Math.PI);
+      ctx.fillStyle = color;
+      ctx.arc(x, y, raio, 0, 2 * Math.PI);
       ctx.fill();
-
-      px += 1
-      anima = requestAnimationFrame(desenhaBola)
-    } else {
-      cancelAnimationFrame(anima)
     }
-
 }
 
 const desenhaRobo = () => {
@@ -68,8 +58,46 @@ const distancia = (xRobo, xBola, yRobo, yBola) => {
   const dX = Math.pow((xBola - xRobo), 2);
   const dY = Math.pow((yBola - yRobo), 2);
 
-  return Math.sqrt(dY + dX)
+  return Math.sqrt(dY + dX) - RAIO_INTERCEPTACAO_M
 }
+
+const interceptou = (distancia) =>  distancia <= 21.5/100;
+
+const desenharTudo = () => {
+  const bolaRaio = 20;
+  const bolaX = coordenadasBola[px].x * 100 + bolaRaio
+  const bolaY = coordenadasBola[px].y * 100 + bolaRaio
+
+  const roboRaio = 30;
+  const roboX = coordenadasRobo[py].x * 100 + roboRaio
+  const roboY = coordenadasRobo[py].y * 100 + roboRaio
+
+  ctx.clearRect(0,0, canvas.width, canvas.height);
+  const ttt = 30.9
+  const teste = bolaX + ttt > roboX &&
+  bolaX - ttt < roboX + roboRaio &&
+  bolaY + ttt > roboY &&
+  bolaY - ttt < roboY + roboRaio
+
+  if(bolaX && bolaY && !teste) {
+    desenha(bolaX, bolaY, bolaRaio, 'purple');
+    px ++
+  } else {
+    px--
+  }
+
+  
+
+ if(roboX && roboY) {
+    desenha(roboX, roboY, roboRaio, 'red');
+ }
+ if(py != coordenadasRobo.length -1) {
+  py ++
+}
+
+  anima = requestAnimationFrame(desenharTudo)
+}
+
 
 const handleStart = async () => {
   const inputX = document.getElementById('x_robo').value;
@@ -79,20 +107,15 @@ const handleStart = async () => {
   px = 0;
   py = 0;
   cancelAnimationFrame(anima);
-  cancelAnimationFrame(animaRobo);
+ // cancelAnimationFrame(animaRobo);
 
 
 
   coordenadasRobo = await getCoordenadasRobo(inputX, inputY)
-  const inter = coordenadasRobo[coordenadasRobo.length - 1]
-  bolas = await getCoordenadasBola()
-  coordenadasBola = await bolas.filter((e) => {
-    const distanciaa = distancia(inter.x, e.x, inter.y, e.y)
-    console.log(distanciaa, e.x);
-    return e.x < inter.x && e.y < inter.y && distanciaa < 1
-  })
-  desenhaBola()
-  desenhaRobo()
+  coordenadasBola = await getCoordenadasBola()
+  
+  desenharTudo()
+  //desenhaRobo()
 }
 
 window.onload = () => {
