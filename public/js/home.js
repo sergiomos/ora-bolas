@@ -5,12 +5,11 @@ let py = 0;
 let anima;
 let animaRobo;
 
-let bolaCoordenadas;
-let roboCoordenadas;
+let coordenadasBola, coordenadasRobo;
 
 const dentroDaTela = (x, y, width, height) => {
-  const dentroDeX = x > 0 && x + width < canvas.width
-  const dentroDeY =  y > 0 && y + height < canvas.height
+  const dentroDeX = x >= 0 && x + width <= canvas.width
+  const dentroDeY =  y >= 0 && y + height <= canvas.height
 
   return dentroDeX && dentroDeY;
 }
@@ -22,79 +21,88 @@ const getCoordenadasBola = async () => {
   return body.data;
 }
 
-const getCoordenadasRobo = async () => {
-  const res = await fetch('/coordenadas/robo')
+const getCoordenadasRobo = async (x, y) => {
+  const res = await fetch(`/coordenadas/robo?x=${x}&y=${y}`)
   const body = await res.json();
   
   return body.data;
 }
 
 const desenhaBola = () => {
-  const bolaX = bolaCoordenadas[px].x*100 + 20;
-  const bolaY = bolaCoordenadas[px].y*100 + 20;
   const bolaRaio = 20;
+  const bolaX = coordenadasBola[px].x * 100 + bolaRaio
+  const bolaY = coordenadasBola[px].y * 100 + bolaRaio
 
-  if(dentroDaTela(bolaX, bolaY, bolaRaio, bolaRaio)) {
-    ctx.clearRect(0, 0, 900, 530)
-    ctx.beginPath()
-    ctx.fillStyle = 'purple';
-    ctx.arc(bolaX, bolaY, bolaRaio, 0, 2 * Math.PI);
-    ctx.fill();
-    px++
-  
-    anima = requestAnimationFrame(desenhaBola);
+    if(dentroDaTela(bolaX, bolaY, bolaRaio, bolaRaio)) {
+      ctx.beginPath()
+      ctx.fillStyle = 'purple';
+      ctx.arc(bolaX, bolaY, bolaRaio, 0, 2 * Math.PI);
+      ctx.fill();
 
-  } else {
-    cancelAnimationFrame(anima);
-  }
+      px += 1
+      anima = requestAnimationFrame(desenhaBola)
+    } else {
+      cancelAnimationFrame(anima)
+    }
+
 }
 
 const desenhaRobo = () => {
-  console.log(roboCoordenadas);
-  let roboX = roboCoordenadas[py].x*100 + 20;
-  let roboY = roboCoordenadas[py].y*100 + 20;
   const roboRaio = 30;
-
-  if(dentroDaTela(roboX, roboY, roboRaio, roboRaio) && roboX && roboY) {
-    ctx.clearRect(0, 0, 900, 530)
-    ctx.beginPath()
-    ctx.fillStyle = 'purple';
-    ctx.arc(roboX, roboY, roboRaio, 0, 2 * Math.PI);
-    ctx.fill();
-    py++
+  const roboX = coordenadasRobo[py].x * 100 + roboRaio
+  const roboY = coordenadasRobo[py].y * 100 + roboRaio
   
-    animaRobo = requestAnimationFrame(desenhaRobo);
-
-  } else {
-
-    ctx.beginPath()
-    ctx.fillStyle = 'purple';
-    ctx.arc(roboX, roboY, roboRaio, 0, 2 * Math.PI);
-    ctx.fill();
-    cancelAnimationFrame(animaRobo);
+  if(dentroDaTela(roboX, roboY, roboRaio, roboRaio) || py < coordenadasRobo.length) {
+    py++
   }
+
+  ctx.beginPath()
+  ctx.fillStyle = 'red';
+  ctx.arc(roboX, roboY, roboRaio, 0, 2 * Math.PI);
+  ctx.fill();
+
+  animaRobo = requestAnimationFrame(desenhaRobo);
 }
 
+const distancia = (xRobo, xBola, yRobo, yBola) => {
+  const dX = Math.pow((xBola - xRobo), 2);
+  const dY = Math.pow((yBola - yRobo), 2);
 
-const handleStart = () => {
+  return Math.sqrt(dY + dX)
+}
+
+const handleStart = async () => {
+  const inputX = document.getElementById('x_robo').value;
+  const inputY = document.getElementById('y_robo').value;
+
+
   px = 0;
   py = 0;
   cancelAnimationFrame(anima);
   cancelAnimationFrame(animaRobo);
+
+
+
+  coordenadasRobo = await getCoordenadasRobo(inputX, inputY)
+  const inter = coordenadasRobo[coordenadasRobo.length - 1]
+  bolas = await getCoordenadasBola()
+  coordenadasBola = await bolas.filter((e) => {
+    const distanciaa = distancia(inter.x, e.x, inter.y, e.y)
+    console.log(distanciaa, e.x);
+    return e.x < inter.x && e.y < inter.y && distanciaa < 1
+  })
   desenhaBola()
   desenhaRobo()
 }
 
 window.onload = () => {
-  const inputX = document.getElementById('x_robo');
-  const inputY = document.getElementById('y_robo');
+
   const startButton = document.getElementById('start');
 
   canvas = document.getElementById('campo');
   ctx = canvas.getContext('2d');
 
-  getCoordenadasBola().then(c => bolaCoordenadas = c);
-  getCoordenadasRobo().then(c => roboCoordenadas = c);
+
   
   startButton.addEventListener('click', handleStart);
 }

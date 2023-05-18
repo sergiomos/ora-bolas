@@ -25,8 +25,21 @@ const aceleracao = (coordenadas) => coordenadas.map((pos, i, arr) => {
       const previousPos = arr[i - 1];
       ax = (pos.vx - previousPos.vx).toFixed(2)
       ay = (pos.vy - previousPos.vy).toFixed(2);
-      break;
+      break;a
   }
 
   return { tempo: pos.tempo, ax, ay }
 });
+
+const distancia = (bola, robo) => {
+
+  const distancias = robo.map(({tempo, x, y}, i) => {
+    const dX = Math.pow((bola[i].x - x), 2);
+    const dY = Math.pow((bola[i].y - y), 2);
+  
+    return {tempo, d: Math.sqrt(dY + dX) - (21.5/100)}
+  })
+ 
+  return distancias;
+}
+

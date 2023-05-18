@@ -15,7 +15,7 @@ const getCanvasId = (option) => {
       return 'axAyRoboBola'
     
     case 'grafico5':
-      return 'aBolaRobo'
+      return 'distancias'
 
     default:
       return 'interceptacaoSpan';

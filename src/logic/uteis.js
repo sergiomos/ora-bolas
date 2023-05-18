@@ -11,18 +11,9 @@ exports.tempoInterceptar = (distancia) => {
   return distancia / VELOCIDADE_MAXIMA_M;
 }
 
-const posicaoFutura = (posicaoAtual, velocidade, tempo) => {
-  return posicaoAtual + (velocidade * tempo);
-}
-
 exports.consegueInterceptar = (tempoRobo, tempoBola) => {
   const tempoIdeal = tempoRobo < tempoBola 
   return tempoIdeal;
 }
 
 exports.interceptou = (distancia) =>  distancia <= RAIO_INTERCEPTACAO_M;
-
-
-const milimetroParaMetro = (milimetro) => milimetro / 1000;
-
-const metroParaMilimetro = (metro) => metro * 1000;

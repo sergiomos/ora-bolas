@@ -1,7 +1,7 @@
 const path = require('path');
 const { readFileSync } = require('fs');
 const { distancia, tempoInterceptar, consegueInterceptar } = require('./uteis.js');
-const { VELOCIDADE_MAXIMA_M } = require('./constantes.js');
+const { VELOCIDADE_MAXIMA_M, RAIO_INTERCEPTACAO_M } = require('./constantes.js');
 
 const filePath = path.join(__dirname, '../trajetoria_bola.txt');
 
@@ -29,7 +29,7 @@ const pontoDeInterceptacao = (roboX, roboY) => {
   const inteceptar = cordenadasBola.find(({ tempo, x: xBola, y: yBola }) => {
     const dist = distancia(roboX, xBola, roboY, yBola);
     const tempoRobo = tempoInterceptar(dist);
-    return consegueInterceptar(tempoRobo, tempo, dist);
+    return consegueInterceptar(tempoRobo, tempo)
   });
 
   return { x: inteceptar.x, y: inteceptar.y, tempo: inteceptar.tempo };

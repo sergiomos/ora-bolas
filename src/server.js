@@ -1,7 +1,6 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
-const ejs = require('ejs');
 const { pegarCoordenadasBola, pegarCoordenadasRobo } = require('./logic/coordenadas');
 
 const PORT = process.env.PORT || 3000;
